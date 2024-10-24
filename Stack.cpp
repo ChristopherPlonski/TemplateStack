@@ -5,31 +5,52 @@
 using namespace std;
 
 template<typename T>
+
+// Class with dynamically allocating heap memory ourselves.
 class Stack {
 
 public:
 	Stack() {
-		stackVector = vector<T>();
+		stackSize = 0;
+		stackArray = new T[0];
 	}
+
 	void push(T value) {
-		stackVector.push_back(value);
-	}
-	T pop() {
-		if (stackVector.empty()) {
-			throw("Stack is empty");
-			return T();
+		stackSize++;
+		T* newStackArray = new T[stackSize];
+
+		for (int i = 0; i < stackSize - 1; i++) {
+			newStackArray[i] = stackArray[i];
 		}
 
-		T topValue = stackVector.back();
+		newStackArray[stackSize - 1] = value;
 
-		stackVector.pop_back();
+		stackArray = newStackArray;
+	}
+
+	T pop() {
+		if (stackSize == 0) {
+			throw("Stack is empty");
+			return NULL;
+		}
+
+		T topValue = stackArray[stackSize-1];
+
+		stackSize--;
+		T* newStackArray = new T[stackSize];
+
+		for (int i = 0; i < stackSize; i++) {
+			newStackArray[i] = stackArray[i];
+		}
+
+		stackArray = newStackArray;
 
 		return topValue;
 	}
 
 private:
-	vector<T> stackVector;
-
+	T* stackArray;
+	int stackSize;
 };
 
 int main() {
@@ -54,3 +75,31 @@ int main() {
 
 	cout << "Tests done. \n";
 }
+
+// Working Stack with Vector
+//class Stack {
+//
+//public:
+//	Stack() {
+//		stackVector = vector<T>();
+//	}
+//	void push(T value) {
+//		stackVector.push_back(value);
+//	}
+//	T pop() {
+//		if (stackVector.empty()) {
+//			throw("Stack is empty");
+//			return T();
+//		}
+//
+//		T topValue = stackVector.back();
+//
+//		stackVector.pop_back();
+//
+//		return topValue;
+//	}
+//
+//private:
+//	vector<T> stackVector;
+//
+//};
